@@ -168,7 +168,17 @@ npm run render:shorts
 ```
 *Gera automaticamente 2 Shorts em formato 9:16 (1080x1920) derivados dos melhores momentos da faixa (Abertura/Burocracia e Clímax/Solo de Guitarra) esticados/ajustados sem tarjas pretas e salvos em `renders/[Nome da Música] - Short 1.mp4` e `renders/[Nome da Música] - Short 2.mp4`.*
 
-### 5. Checagem de Tipos TypeScript
+### 5. Transcrever Letras com IA (Whisper)
+```bash
+# Instalar dependências Python (uma única vez)
+pip install -r requirements.txt
+
+# Gerar JSON de legendas sincronizado
+npm run lyrics
+```
+*Executa o Whisper localmente sobre a música em `assets/musics/`, detecta os tempos exatos e salva o JSON em `assets/lyrics/[Nome da Música].json`. Opcionalmente, adicione o arquivo de texto `assets/lyrics/[Nome da Música].txt` com a letra oficial do Suno para guiar a transcrição com 100% de fidelidade.*
+
+### 6. Checagem de Tipos TypeScript
 ```bash
 npm run typecheck
 ```
@@ -179,12 +189,18 @@ npm run typecheck
 
 1. **Adicione a Música:** Coloque o arquivo gerado no Suno (`.wav` ou `.mp3`) dentro de `assets/musics/`.
 2. **Adicione os Vídeos:** Crie uma pasta dentro de `assets/videos/` (ex: `assets/videos/nome-da-musica/`) e adicione todos os clipes de até 8 segundos gerados no Google Flow.
-3. **Sincronize e Renderize:**
+3. **(Opcional) Gere as Legendas com Whisper:**
    ```bash
-   npm run render
+   npm run lyrics
    ```
-4. O Remotion automaticamente:
+4. **Sincronize e Renderize:**
+   ```bash
+   npm run render         # Vídeo completo 16:9
+   npm run render:shorts  # 2 Shorts verticais 9:16
+   ```
+5. O Remotion automaticamente:
    - Identificará o título da música e sua duração exata em quadros;
+   - Carregará e sincronizará as legendas de teletexto analógico (se o JSON existir);
    - Ordenará os vídeos pelo fluxo narrativo temático;
    - Aplicará os cortes secos no ritmo de 140 BPM com variações nos clipes repetidos;
    - Renderizará a estética completa CRT Soviética com o encerramento canônico em `renders/[Nome da Música].mp4`.

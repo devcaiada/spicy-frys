@@ -1,3 +1,5 @@
+import type {LyricSubtitle} from "../components/subtitles/SovietClosedCaptions";
+
 export const SONG_TITLE = "Intergalactic Lobbyists";
 
 export const LOOPING_VIDEOS: readonly string[] = [
@@ -26,3 +28,5 @@ export const MUSIC_TRACKS: readonly string[] = [
 export const DETECTED_AUDIO_DURATION_IN_FRAMES = 5194;
 
 export const LOGO_ASSET = "assets/logo/Spicy_Frys_logo.jpeg";
+
+export const LYRICS_DATA: readonly LyricSubtitle[] = [] as const;

@@ -153,12 +153,36 @@ if (existsSync(logoSourceDir)) {
   }
 }
 
+// Sync lyrics
+const lyricsSourceDir = path.join(projectRoot, 'assets', 'lyrics');
+const lyricsDestDir = path.join(projectRoot, 'public', 'assets', 'lyrics');
+mkdirSync(lyricsDestDir, {recursive: true});
+
+let lyricsData = [];
+if (existsSync(lyricsSourceDir)) {
+  const jsonFiles = listFilesRecursive(lyricsSourceDir).filter((f) => f.toLowerCase().endsWith('.json'));
+  for (const file of jsonFiles) {
+    const fileName = path.basename(file);
+    const destPath = path.join(lyricsDestDir, fileName);
+    copyFileSync(file, destPath);
+    if (fileName === `${songTitle}.json` || jsonFiles.length === 1) {
+      try {
+        lyricsData = JSON.parse(readFileSync(file, 'utf-8'));
+      } catch {
+        // ignore invalid JSON
+      }
+    }
+  }
+}
+
 // Generate src/config/spicyFrysAssets.ts
 const manifestPath = path.join(projectRoot, 'src', 'config', 'spicyFrysAssets.ts');
 
 writeFileSync(
   manifestPath,
   [
+    'import type {LyricSubtitle} from "../components/subtitles/SovietClosedCaptions";',
+    '',
     `export const SONG_TITLE = ${JSON.stringify(songTitle)};`,
     '',
     'export const LOOPING_VIDEOS: readonly string[] = [',
@@ -172,6 +196,8 @@ writeFileSync(
     `export const DETECTED_AUDIO_DURATION_IN_FRAMES = ${detectedAudioDurationFrames};`,
     '',
     `export const LOGO_ASSET = ${JSON.stringify(logoAssets[0] ?? 'assets/logo/Spicy_Frys_logo.jpeg')};`,
+    '',
+    `export const LYRICS_DATA: readonly LyricSubtitle[] = ${JSON.stringify(lyricsData, null, 2)} as const;`,
     '',
   ].join('\n'),
 );

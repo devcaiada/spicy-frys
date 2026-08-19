@@ -3,7 +3,8 @@ import React from 'react';
 import {SovietCRTWrapper} from '../components/effects/SovietCRTWrapper';
 import {SovietOutro} from '../components/outro/SovietOutro';
 import {BeatSyncedSequencer} from '../components/sequencer/BeatSyncedSequencer';
-import {LOOPING_VIDEOS, MUSIC_TRACKS} from '../config/spicyFrysAssets';
+import {SovietClosedCaptions} from '../components/subtitles/SovietClosedCaptions';
+import {LOOPING_VIDEOS, LYRICS_DATA, MUSIC_TRACKS} from '../config/spicyFrysAssets';
 
 export type SpicyFrysShortsProps = {
   musicOffsetFrame?: number;
@@ -32,7 +33,8 @@ export const SHORTS_CONFIG = {
  * 2. Visuals stretched & cropped (objectFit: cover) to fully fill 9:16 vertically.
  * 3. Fast beat-synced cuts (4-6s) with repetition variation engine.
  * 4. Soviet Brutalism CRT/VHS degradation overlay.
- * 5. Responsive Soviet Outro ("Спайси Фрайс" + calibrated static + blackout).
+ * 5. Closed Captions: 80s Soviet Teletext / CCTV subtitles (synchronized to audio segment).
+ * 6. Responsive Soviet Outro ("Спайси Фрайс" + calibrated static + blackout).
  */
 export const SpicyFrysShorts: React.FC<SpicyFrysShortsProps> = ({
   musicOffsetFrame = 0,
@@ -70,6 +72,16 @@ export const SpicyFrysShorts: React.FC<SpicyFrysShortsProps> = ({
             customClips={customClips}
           />
         </Sequence>
+
+        {/* 80s Soviet Closed Captions (Active only when lyrics JSON is present) */}
+        {LYRICS_DATA && LYRICS_DATA.length > 0 && (
+          <Sequence from={0} durationInFrames={mainDurationInFrames}>
+            <SovietClosedCaptions
+              lyrics={LYRICS_DATA}
+              musicOffsetFrame={musicOffsetFrame}
+            />
+          </Sequence>
+        )}
 
         {/* Responsive 9:16 Soviet Outro */}
         <Sequence from={outroStartFrame} durationInFrames={outroDurationInFrames}>

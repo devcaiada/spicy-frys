@@ -5,7 +5,9 @@ import {AudioManager} from '../components/metalfi/AudioManager';
 import {VHSIntro} from '../components/metalfi/VHSIntro';
 import {SovietOutro} from '../components/outro/SovietOutro';
 import {BeatSyncedSequencer} from '../components/sequencer/BeatSyncedSequencer';
+import {SovietClosedCaptions} from '../components/subtitles/SovietClosedCaptions';
 import {METALFI_VIDEO} from '../config/metalfi';
+import {LYRICS_DATA} from '../config/spicyFrysAssets';
 
 /**
  * SpicyFrysMetalFi - Main Composition
@@ -14,7 +16,8 @@ import {METALFI_VIDEO} from '../config/metalfi';
  * 1. Direct Start: Starts immediately with music & visuals (no intro, no logo sequence).
  * 2. Visual Assembly: Curated narrative ordering of Google Flow clips with beat-synced cuts & repetition variations.
  * 3. Degradation Layer: SovietCRTWrapper (muted pastel palette, scanlines, chromatic shift, noise).
- * 4. Calibrated Outro: "Спайси Фрайс" with softened atmospheric static burst and hard cut to black.
+ * 4. Closed Captions: 80s Soviet Teletext / CCTV subtitles (rendered if LYRICS_DATA exists).
+ * 5. Calibrated Outro: "Спайси Фрайс" with softened atmospheric static burst and hard cut to black.
  */
 export const SpicyFrysMetalFi: React.FC = () => {
   const {
@@ -55,6 +58,13 @@ export const SpicyFrysMetalFi: React.FC = () => {
             maxCutSeconds={maxCutSeconds}
           />
         </Sequence>
+
+        {/* 80s Soviet Closed Captions (Active only when lyrics JSON is present) */}
+        {LYRICS_DATA && LYRICS_DATA.length > 0 && (
+          <Sequence from={mainStartFrame} durationInFrames={mainDurationInFrames}>
+            <SovietClosedCaptions lyrics={LYRICS_DATA} />
+          </Sequence>
+        )}
 
         {/* Signature Outro: "Спайси Фрайс" + atmospheric static + hard cut to black */}
         <Sequence from={outroStartFrame} durationInFrames={outroDurationInFrames}>
