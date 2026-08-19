@@ -19,7 +19,8 @@ type SovietOutroProps = {
  */
 export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
+  const isPortrait = height > width;
 
   const aggressiveStaticSrc = useMemo(
     () => createAggressiveStaticDataUri(Math.max(1, durationInFrames / fps)),
@@ -44,6 +45,12 @@ export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
       />
     );
   }
+
+  const titleFontSize = isPortrait ? '68px' : '110px';
+  const titleLetterSpacing = isPortrait ? '6px' : '14px';
+  const boxPadding = isPortrait ? '24px 24px' : '28px 64px';
+  const stampFontSize = isPortrait ? '14px' : '18px';
+  const sealFontSize = isPortrait ? '13px' : '15px';
 
   return (
     <AbsoluteFill
@@ -75,7 +82,8 @@ export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
       <div
         style={{
           border: '4px solid #d7ceb2',
-          padding: '28px 64px',
+          padding: boxPadding,
+          maxWidth: isPortrait ? '92%' : 'auto',
           backgroundColor: 'rgba(24, 28, 30, 0.88)',
           boxShadow: '0 0 35px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 0, 0, 0.8)',
           transform: `translate(${jitterX}px, ${jitterY}px)`,
@@ -83,6 +91,7 @@ export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          textAlign: 'center',
           gap: '12px',
         }}
       >
@@ -90,8 +99,8 @@ export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
         <div
           style={{
             fontFamily: 'monospace',
-            fontSize: '18px',
-            letterSpacing: '6px',
+            fontSize: stampFontSize,
+            letterSpacing: isPortrait ? '3px' : '6px',
             color: '#a89f81',
             textTransform: 'uppercase',
           }}
@@ -103,8 +112,8 @@ export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
         <h1
           style={{
             fontFamily: `${antonFont}, 'Impact', sans-serif`,
-            fontSize: '110px',
-            letterSpacing: '14px',
+            fontSize: titleFontSize,
+            letterSpacing: titleLetterSpacing,
             textTransform: 'uppercase',
             margin: 0,
             lineHeight: 1,
@@ -123,8 +132,8 @@ export const SovietOutro: React.FC<SovietOutroProps> = ({durationInFrames}) => {
         <div
           style={{
             fontFamily: 'monospace',
-            fontSize: '15px',
-            letterSpacing: '4px',
+            fontSize: sealFontSize,
+            letterSpacing: isPortrait ? '2px' : '4px',
             color: '#c2593f',
             fontWeight: 'bold',
           }}

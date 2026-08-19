@@ -156,13 +156,19 @@ npm run dev
 ```
 *Abre o estúdio interativo em `http://localhost:3000` permitindo navegar frame a frame pela timeline.*
 
-### 3. Renderizar o Videoclipe Completo em MP4
+### 3. Renderizar o Videoclipe Completo (16:9 Widescreen)
 ```bash
 npm run render
 ```
 *Sincroniza os assets, ordena os clipes narrativamente, detecta a duração do áudio e salva o arquivo final em `renders/[Nome da Música].mp4`.*
 
-### 4. Checagem de Tipos TypeScript
+### 4. Renderizar os YouTube Shorts (9:16 Vertical)
+```bash
+npm run render:shorts
+```
+*Gera automaticamente 2 Shorts em formato 9:16 (1080x1920) derivados dos melhores momentos da faixa (Abertura/Burocracia e Clímax/Solo de Guitarra) esticados/ajustados sem tarjas pretas e salvos em `renders/[Nome da Música] - Short 1.mp4` e `renders/[Nome da Música] - Short 2.mp4`.*
+
+### 5. Checagem de Tipos TypeScript
 ```bash
 npm run typecheck
 ```

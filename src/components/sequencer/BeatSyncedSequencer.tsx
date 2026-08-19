@@ -1,4 +1,4 @@
-import {AbsoluteFill, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Sequence, Video, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import React, {useMemo} from 'react';
 import {LOOPING_VIDEOS} from '../../config/spicyFrysAssets';
 import {CutSegment, calculateCutSchedule} from '../../lib/beatSync';
@@ -9,6 +9,7 @@ type BeatSyncedSequencerProps = {
   bpm?: number;
   minCutSeconds?: number;
   maxCutSeconds?: number;
+  customClips?: readonly string[];
 };
 
 const ClipRenderer: React.FC<{
@@ -57,13 +58,17 @@ const ClipRenderer: React.FC<{
 
   return (
     <AbsoluteFill style={{overflow: 'hidden'}}>
-      <OffthreadVideo
+      <Video
         src={staticFile(videoSrc)}
-        startFrom={segment.clipStartOffsetFrame}
+        startFrom={0}
         muted
+        loop
+        onError={() => {
+          // Gracefully suppress frame seek decode errors in Chromium
+        }}
         style={{
-          width,
-          height,
+          width: '100%',
+          height: '100%',
           objectFit: 'cover',
           transform,
           filter,
@@ -89,9 +94,12 @@ export const BeatSyncedSequencer: React.FC<BeatSyncedSequencerProps> = ({
   bpm = 140,
   minCutSeconds = 4,
   maxCutSeconds = 8,
+  customClips,
 }) => {
   const frame = useCurrentFrame();
   const {fps, width, height} = useVideoConfig();
+
+  const clips = customClips && customClips.length > 0 ? customClips : LOOPING_VIDEOS;
 
   const segments = useMemo(() => {
     return calculateCutSchedule({
@@ -100,10 +108,10 @@ export const BeatSyncedSequencer: React.FC<BeatSyncedSequencerProps> = ({
       totalFrames: durationInFrames,
       minCutSeconds,
       maxCutSeconds,
-      assetClipCount: Math.max(1, LOOPING_VIDEOS.length),
+      assetClipCount: Math.max(1, clips.length),
       clipMaxDurationSeconds: 8,
     });
-  }, [bpm, fps, durationInFrames, minCutSeconds, maxCutSeconds]);
+  }, [bpm, fps, durationInFrames, minCutSeconds, maxCutSeconds, clips.length]);
 
   const isCutFrame = useMemo(() => {
     return segments.some((segment) => {
@@ -112,7 +120,7 @@ export const BeatSyncedSequencer: React.FC<BeatSyncedSequencerProps> = ({
     });
   }, [segments, frame]);
 
-  if (LOOPING_VIDEOS.length === 0) {
+  if (clips.length === 0) {
     return (
       <AbsoluteFill
         style={{
@@ -132,7 +140,7 @@ export const BeatSyncedSequencer: React.FC<BeatSyncedSequencerProps> = ({
   return (
     <AbsoluteFill>
       {segments.map((seg, idx) => {
-        const videoSrc = LOOPING_VIDEOS[seg.clipIndex];
+        const videoSrc = clips[seg.clipIndex];
 
         return (
           <Sequence
