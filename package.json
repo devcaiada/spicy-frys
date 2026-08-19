@@ -4,13 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts LoopingOrbits renders/looping-orbits.mp4",
+    "sync:assets": "node scripts/sync-assets.mjs",
+    "dev": "node scripts/sync-assets.mjs && remotion studio src/index.ts",
+    "render": "node scripts/render-video.mjs",
+    "render:orbits": "remotion render src/index.ts LoopingOrbits renders/looping-orbits.mp4",
     "render:still": "remotion still src/index.ts LoopingOrbits renders/looping-orbits.png --frame=0",
+    "render:cassette:still": "remotion still src/index.ts CassetteLoopScene renders/cassette-loop.png --frame=0",
+    "render:metalfi": "node scripts/render-video.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.344",
+    "@remotion/google-fonts": "^4.0.344",
+    "@remotion/media-utils": "^4.0.344",
+    "@remotion/noise": "^4.0.344",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "remotion": "^4.0.344"

@@ -144,3 +144,8 @@ vite.config.ts.timestamp-*
 renders/
 exports/
 assets-src/
+public/assets/
+*.log
+.idea/
+**/.idea/
+

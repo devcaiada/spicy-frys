@@ -1,6 +1,8 @@
 import {execFileSync} from 'node:child_process';
 
-const compositions = ['LoopingOrbits'];
+execFileSync('node', ['scripts/sync-assets.mjs'], {stdio: 'inherit'});
+
+const compositions = ['SpicyFrysMetalFi', 'LoopingOrbits', 'CassetteLoopScene'];
 
 for (const composition of compositions) {
   execFileSync(
