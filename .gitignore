@@ -141,11 +141,38 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+# Video & Audio Render Output
 renders/
 exports/
 assets-src/
 public/assets/
+
+# Raw media assets (do not upload large video & music files)
+*.mp4
+*.mov
+*.webm
+*.avi
+*.mkv
+*.wav
+*.mp3
+*.ogg
+*.flac
+*.m4a
+*.aac
+
+# Asset directories containing video and audio files
+assets/videos/*
+assets/musics/*
+assets/looping/*
+assets/loopings/*
+!assets/videos/.gitkeep
+!assets/musics/.gitkeep
+!assets/looping/.gitkeep
+!assets/logo/.gitkeep
+
+# IDE and logs
 *.log
 .idea/
 **/.idea/
+
 
